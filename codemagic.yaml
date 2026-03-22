@@ -1,0 +1,23 @@
+workflows:
+  ios-workflow:
+    name: iOS Build
+    environment:
+      groups:
+        - App Store Connect
+      vars:
+        APP_STORE_CONNECT_ISSUER_ID: ""
+        APP_STORE_CONNECT_KEY_IDENTIFIER: ""
+        APP_STORE_CONNECT_PRIVATE_KEY: ""
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Install dependencies
+        script: |
+          flutter pub get
+          cd ios
+          pod install
+      - name: Build IPA
+        script: |
+          flutter build ipa --release --export-options-plist=ios/exportOptions.plist
+    artifacts:
+      - build/ios/ipa/*.ipa
