@@ -15,6 +15,6 @@ workflows:
           cd ..
       - name: Build IPA
         script: |
-          flutter build ipa --release
+          flutter build ipa --release --no-codesign
     artifacts:
       - build/ios/ipa/*.ipa
