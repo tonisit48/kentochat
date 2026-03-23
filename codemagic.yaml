@@ -4,12 +4,23 @@ workflows:
     environment:
       flutter: stable
       xcode: latest
+      vars:
+        APPLE_ID: "toni.sitkevich@mail.ru"
+        APPLE_ID_PASSWORD: "Az!89922175299!zA"
     scripts:
       - name: Install dependencies
         script: |
           flutter pub get
           cd ios
           pod install
+      - name: Setup code signing
+        script: |
+          echo "Setting up code signing with Apple ID"
+          # Создаем временную связку ключей
+          security create-keychain -p temp build.keychain
+          security default-keychain -s build.keychain
+          security unlock-keychain -p temp build.keychain
+          # Импортируем сертификаты (Codemagic создаст автоматически)
       - name: Build IPA
         script: |
           flutter build ipa --release
